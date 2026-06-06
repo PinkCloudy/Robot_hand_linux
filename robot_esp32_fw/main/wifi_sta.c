@@ -5,8 +5,8 @@
 #include "nvs_flash.h"
 #include <string.h>
 
-#define WIFI_SSID      "House BM"
-#define WIFI_PASS      "20abachmai20a"
+#define WIFI_SSID      "ok"
+#define WIFI_PASS      "conlonbeo"
 static const char *TAG = "WIFI";
 
 static void event_handler(void* arg, esp_event_base_t event_base, int32_t event_id, void* event_data) {
