@@ -4,3 +4,11 @@
 modules.order
 Module.symvers
 .*.cmd
+# Chặn thư mục build của ESP-IDF
+build/
+
+# Chặn cấu hình riêng của VS Code (nếu không muốn push cấu hình máy cá nhân lên)
+.vscode/
+
+# Chặn file cấu hình phần cứng sinh ra khi build
+sdkconfig
