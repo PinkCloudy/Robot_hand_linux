@@ -44,5 +44,6 @@ void udp_server_task(void *pvParameters) {
                 servo_update_pwm(x, y, ry, gripper_cmd);
             }
         }
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
