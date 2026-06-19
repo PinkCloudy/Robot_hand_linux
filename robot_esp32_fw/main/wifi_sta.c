@@ -7,14 +7,9 @@
 #include "freertos/event_groups.h"
 #include <string.h>
 
-// Định nghĩa thông tin mạng Wi-Fi
-#define WIFI_SSID "House BM"
-#define WIFI_PASS "20abachmai20a"
-
-// ĐỊNH NGHĨA IP TĨNH (Sửa theo lớp mạng Router nhà bạn)
-#define STATIC_IP      "192.168.1.217"
-#define STATIC_GATEWAY "192.168.1.1"
-#define STATIC_NETMASK "255.255.255.0"
+// Thay đổi thông tin mạng Hotspot của bạn tại đây
+#define WIFI_SSID "ok"
+#define WIFI_PASS "conlonbeo"
 
 #define WIFI_CONNECTED_BIT BIT0
 
@@ -30,15 +25,14 @@ static void event_handler(
     if (event_base == WIFI_EVENT &&
         event_id == WIFI_EVENT_STA_START) {
 
-        ESP_LOGI(TAG, "Bat dau ket noi Wi-Fi...");
+        ESP_LOGI(TAG, "Bat dau ket noi Hotspot...");
         ESP_ERROR_CHECK(esp_wifi_connect());
     }
 
     else if (event_base == WIFI_EVENT &&
              event_id == WIFI_EVENT_STA_CONNECTED) {
 
-        // Vì dùng IP tĩnh nên sẽ không chờ DHCP nữa, sự kiện GOT_IP sẽ được kích hoạt ngay
-        ESP_LOGI(TAG, "Da ket noi Access Point, dang thiet lap IP...");
+        ESP_LOGI(TAG, "Da ket noi Access Point, dang cho DHCP cap IP...");
     }
 
     else if (event_base == WIFI_EVENT &&
@@ -70,7 +64,7 @@ static void event_handler(
         ESP_LOGI(TAG, "================================");
         ESP_LOGI(
             TAG,
-            "ESP32 da nhan IP: " IPSTR,
+            "ESP32 da nhan IP dong: " IPSTR,
             IP2STR(&event->ip_info.ip)
         );
         ESP_LOGI(
@@ -150,25 +144,13 @@ void wifi_init_sta(void) {
         )
     );
 
-    // ==========================================================
-    // [THÊM MỚI] CẤU HÌNH ÉP IP TĨNH ĐỂ VƯỢT LỖI DHCP CỦA ROUTER
-    // ==========================================================
-    ESP_LOGW(TAG, "Dung DHCP Client, ep cap IP tinh (Static IP)...");
-    esp_netif_dhcpc_stop(sta_netif); 
-    
-    esp_netif_ip_info_t ip_info;
-    esp_netif_str_to_ip4(STATIC_IP, &ip_info.ip);
-    esp_netif_str_to_ip4(STATIC_GATEWAY, &ip_info.gw);
-    esp_netif_str_to_ip4(STATIC_NETMASK, &ip_info.netmask);
-
-    esp_netif_set_ip_info(sta_netif, &ip_info);
-    // ==========================================================
+    // Bỏ khối code ép IP tĩnh, để mặc định ESP-IDF tự động chạy DHCP Client
 
     ESP_ERROR_CHECK(esp_wifi_start());
 }
 
 void wifi_wait_for_ip(void) {
-    ESP_LOGI(TAG, "Dang cho ket noi mang va thiet lap IP...");
+    ESP_LOGI(TAG, "Dang cho ket noi mang va cap phat IP...");
 
     xEventGroupWaitBits(
         wifi_event_group,
@@ -178,5 +160,5 @@ void wifi_wait_for_ip(void) {
         portMAX_DELAY
     );
 
-    ESP_LOGI(TAG, "Da co IP, he thong mang san sang! Tiep tuc khoi tao UDP.");
+    ESP_LOGI(TAG, "Da co IP dong, he thong mang san sang! Tiep tuc khoi tao UDP.");
 }
